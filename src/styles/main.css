@@ -1,0 +1,20 @@
+@import url('./player.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+#stage {
+    background-image: url('../assets/images/image.png');
+    background-size: 600px 450px;
+}
+
+.object {
+    position: absolute;
+    background-size: 100% 100%;
+}
+
+.chest {
+    background-image: url('../assets/images/chest.png');
+}

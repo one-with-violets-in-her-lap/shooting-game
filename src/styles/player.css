@@ -1,0 +1,45 @@
+.player {
+    background-image: url('../assets/images/character/standing.png');
+    background-size: 100%;
+
+    filter: drop-shadow(-4px 24px 4px #00000080);
+
+    transition: transform 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.player:not([direction="none"]) {
+    background-size: 512px;
+    background-repeat: no-repeat;
+    background-position: 0px;
+}
+
+.player[walking] {
+    animation: spritesheet-animation steps(4) 0.8s infinite;
+}
+
+.player[direction="right"] {
+    background-image: url('../assets/images/character/walk-right-frames.png');
+}
+
+.player[direction="left"] {
+    background-image: url('../assets/images/character/walk-right-frames.png');
+    transform: rotateY(180deg);
+}
+
+.player[direction="top"] {
+    background-image: url('../assets/images/character/walk-up-frames.png');
+}
+
+.player[direction="bottom"] {
+    background-image: url('../assets/images/character/walk-down-frames.png');
+}
+
+@keyframes spritesheet-animation {
+    0% {
+        background-position: 0px;
+    }
+    100% {
+        background-position: -512px;
+    }
+}
