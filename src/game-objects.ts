@@ -8,6 +8,7 @@ export const objects : GameObject[] = []
 interface GameObjectOptions {
     domElementClass?: string;
     disableCollision?: boolean;
+    doOnCollision?: (collidedObject: GameObject) => void;
 }
 
 export class GameObject {
@@ -60,9 +61,15 @@ export class GameObject {
             return object.id !== this.id
                 && (newY + this.height >= object.position.y && newY <= object.position.y - collisionOffset)
         })
-        
-        if(xCollisionObject && yCollisionObject && xCollisionObject.id === yCollisionObject.id) {
-            xCollisionObject.destroy()
+
+        const collisionEnabled = !this.options.disableCollision && !xCollisionObject?.options.disableCollision
+        if(xCollisionObject && yCollisionObject && xCollisionObject.id === yCollisionObject.id
+            && collisionEnabled) {
+
+            if(xCollisionObject.options.doOnCollision) {
+                xCollisionObject.options.doOnCollision(this)
+            }
+
             return
         }
 
