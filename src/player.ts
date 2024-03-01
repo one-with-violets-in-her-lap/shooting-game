@@ -1,7 +1,10 @@
 import { GameObject } from '@/game-objects'
 import { getTypedObjectKeys } from '@/utils/get-typed-object-keys'
 
-const player = new GameObject(128, 128, { x: 10, y: 10 }, { domElementClass: 'player' })
+const player = new GameObject(52, 82, { x: 10, y: 10 }, { domElementClass: 'player-container' })
+player.domElement.insertAdjacentHTML('afterbegin', `
+    <div class="player-sprite"></div>
+`)
 const playerElement = player.domElement
 playerElement.setAttribute('direction', 'bottom')
 
@@ -55,7 +58,7 @@ export function updatePlayerPosition(globalContainer: HTMLDivElement) {
     }
 
     if(moveState.left.active) {
-        player.setPosition({ x: playerPosition.x - movePixelsAmount }, 42)
+        player.setPosition({ x: playerPosition.x - movePixelsAmount })
         /* if(playerPosition.x - movePixelsAmount > 0) {
             playerPosition.x = playerPosition.x - movePixelsAmount
         }
@@ -65,7 +68,7 @@ export function updatePlayerPosition(globalContainer: HTMLDivElement) {
     }
 
     if(moveState.top.active) {
-        player.setPosition({ y: playerPosition.y - movePixelsAmount }, 42)
+        player.setPosition({ y: playerPosition.y - movePixelsAmount })
         
         /* if(playerPosition.y - movePixelsAmount > 0) {
             playerPosition.y = playerPosition.y - movePixelsAmount
@@ -76,7 +79,7 @@ export function updatePlayerPosition(globalContainer: HTMLDivElement) {
     }
 
     if(moveState.right.active) {
-        player.setPosition({ x: playerPosition.x + movePixelsAmount }, 42)
+        player.setPosition({ x: playerPosition.x + movePixelsAmount })
         /* const xBound = globalContainer.clientWidth - playerElement.clientWidth
         if(xBound > playerPosition.x + movePixelsAmount) {
             playerPosition.x = playerPosition.x + movePixelsAmount
@@ -87,7 +90,7 @@ export function updatePlayerPosition(globalContainer: HTMLDivElement) {
     }
 
     if(moveState.bottom.active) {
-        player.setPosition({ y: playerPosition.y + movePixelsAmount }, 42)
+        player.setPosition({ y: playerPosition.y + movePixelsAmount })
         /* const yBound = globalContainer.clientHeight - playerElement.clientHeight
         if(yBound > playerPosition.y + movePixelsAmount) {
             playerPosition.y = playerPosition.y + movePixelsAmount

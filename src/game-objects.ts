@@ -16,7 +16,7 @@ export class GameObject {
     readonly domElement: HTMLDivElement
 
     constructor(private readonly width: number, private readonly height: number,
-        private readonly position:  Position, private readonly options: GameObjectOptions) {
+        private readonly position:  Position, private readonly options?: GameObjectOptions) {
 
         this.id = lastObjectId++
 
@@ -25,7 +25,7 @@ export class GameObject {
         this.domElement.style.height = this.height + 'px'
         
         this.domElement.classList.add('object')
-        if(this.options.domElementClass) {
+        if(this.options?.domElementClass) {
             this.domElement.classList.add(this.options.domElementClass)
         }
         
@@ -40,33 +40,34 @@ export class GameObject {
         return this.position
     }
 
-    setPosition(newPosition: Partial<Position>, collisionOffset: number = 0) {
-        if(newPosition.x !== undefined && (newPosition.x + this.width > stage?.clientWidth + collisionOffset
-            || newPosition.x < 0 - collisionOffset)) {
+    setPosition(newPosition: Partial<Position>) {
+        if(newPosition.x !== undefined && (newPosition.x + this.width > stage?.clientWidth
+            || newPosition.x < 0)) {
             return
         }
          
         if(newPosition.y !== undefined && (newPosition.y + this.height > stage?.clientHeight
-            || newPosition.y < 0 - collisionOffset)) {
+            || newPosition.y < 0)) {
             return
         }
         
         const xCollisionObject = objects.find(object => {
             const newX = newPosition.x || this.position.x
             return object.id !== this.id
-                && (newX + this.width >= object.position.x + collisionOffset && newX <= object.position.x - collisionOffset + object.width)
+                && (newX + this.width >= object.position.x
+                && newX <= object.position.x + object.width)
         })
         const yCollisionObject = objects.find(object => {
             const newY = newPosition.y || this.position.y
             return object.id !== this.id
-                && (newY + this.height >= object.position.y && newY <= object.position.y - collisionOffset)
+                && (newY + this.height >= object.position.y && newY <= object.position.y)
         })
 
-        const collisionEnabled = !this.options.disableCollision && !xCollisionObject?.options.disableCollision
+        const collisionEnabled = !this.options?.disableCollision && !xCollisionObject?.options?.disableCollision
         if(xCollisionObject && yCollisionObject && xCollisionObject.id === yCollisionObject.id
             && collisionEnabled) {
 
-            if(xCollisionObject.options.doOnCollision) {
+            if(xCollisionObject.options?.doOnCollision) {
                 xCollisionObject.options.doOnCollision(this)
             }
 
