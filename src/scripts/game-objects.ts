@@ -1,9 +1,4 @@
-import { Position } from '@/types/position';
-
-const stage = document.querySelector('#stage') as HTMLDivElement
-
-let lastObjectId = 0
-export const objects : GameObject[] = []
+import { Position } from '@/scripts/types/position';
 
 interface GameObjectOptions {
     domElementClass?: string;
@@ -11,9 +6,13 @@ interface GameObjectOptions {
     doOnCollision?: (collidedObject: GameObject) => void;
 }
 
+export const objects : GameObject[] = []
+let lastObjectId = 0
+
 export class GameObject {
     readonly id: number
     readonly domElement: HTMLDivElement
+    readonly stage: HTMLDivElement
 
     constructor(private readonly width: number, private readonly height: number,
         private readonly position:  Position, private readonly options?: GameObjectOptions) {
@@ -31,7 +30,14 @@ export class GameObject {
         
         this.domElement.style.top = this.position.y + 'px'
         this.domElement.style.left = this.position.x + 'px'
-        stage.insertAdjacentElement('afterbegin', this.domElement)
+
+        const stageElement =  document.querySelector('#stage') as HTMLDivElement | null
+        if(!stageElement) {
+            throw new Error('game is not initialized. couldn\'t find a stage element')
+        }
+        this.stage = stageElement
+
+        this.stage.insertAdjacentElement('afterbegin', this.domElement)
 
         objects.push(this)
     }
@@ -41,12 +47,12 @@ export class GameObject {
     }
 
     setPosition(newPosition: Partial<Position>) {
-        if(newPosition.x !== undefined && (newPosition.x + this.width > stage?.clientWidth
+        if(newPosition.x !== undefined && (newPosition.x + this.width > this.stage?.clientWidth
             || newPosition.x < 0)) {
             return
         }
          
-        if(newPosition.y !== undefined && (newPosition.y + this.height > stage?.clientHeight
+        if(newPosition.y !== undefined && (newPosition.y + this.height > this.stage?.clientHeight
             || newPosition.y < 0)) {
             return
         }
