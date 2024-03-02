@@ -3,12 +3,19 @@ import '@/styles/main.css'
 import { GameObject, objects } from '@/scripts/game-objects'
 import { initializePlayer, updatePlayerPosition } from '@/scripts/player'
 
-const startGameButton = document.querySelector('#startGameButton')
 const titleScreen = document.querySelector('#titleScreen')
+
+const startGameButton = document.querySelector('#startGameButton')
 startGameButton?.addEventListener('click', () => {
-  initializeGame()  
+  initializeGame()
 })
 
+const restartButton = document.querySelector('#restartButton')
+restartButton?.addEventListener('click', () => {
+    resetGame()
+})
+
+let currentUpdateFrameId : number | undefined = undefined
 function initializeGame() {
     document.querySelector('#globalContainer')?.insertAdjacentHTML('beforeend', `
         <div id="stage" class="relative h-full overflow-hidden"></div>
@@ -23,13 +30,26 @@ function initializeGame() {
         },
     })
 
-    requestAnimationFrame(update)
+    currentUpdateFrameId = requestAnimationFrame(update)
     function update() {
         updatePlayerPosition()
         objects.forEach(gameObject => gameObject.update())
 
-        requestAnimationFrame(update)
+        currentUpdateFrameId = requestAnimationFrame(update)
     }
 
     titleScreen?.classList.add('-translate-y-full')
+}
+
+function resetGame() {
+    const currentObjects = [...objects]
+    currentObjects.forEach(object => object.destroy())
+    
+    if(currentUpdateFrameId) {
+        cancelAnimationFrame(currentUpdateFrameId)
+    }
+
+    document.querySelector('#stage')?.remove()
+
+    initializeGame()
 }

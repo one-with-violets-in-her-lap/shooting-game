@@ -10,6 +10,26 @@ const moveState = {
     bottom: { active: false, key: 'S' }
 }
 
+window.addEventListener('keydown', event => {
+    toggleDirectionMovement(event.code, true)
+})
+window.addEventListener('keyup', event => {
+    toggleDirectionMovement(event.code, false)
+})
+window.addEventListener('blur', () => {
+    getTypedObjectKeys(moveState).forEach(directionName => {
+        moveState[directionName].active = false
+    })
+})
+function toggleDirectionMovement(keyCode : string, active: boolean) {
+    for (const directionName in moveState) {
+        const direction = moveState[directionName as keyof typeof moveState]
+        if(keyCode.toUpperCase() === 'KEY' + direction.key) {
+            direction.active = active
+        }
+    }
+}
+
 export function initializePlayer() {
     player = new GameObject(52, 82, { x: 10, y: 10 }, { domElementClass: 'player-container' })
 
@@ -17,26 +37,6 @@ export function initializePlayer() {
         <div class="player-sprite"></div>
     `)
     player.domElement.setAttribute('direction', 'bottom')
-
-    window.addEventListener('keydown', event => {
-        toggleDirectionMovement(event.code, true)
-    })
-    window.addEventListener('keyup', event => {
-        toggleDirectionMovement(event.code, false)
-    })
-    window.addEventListener('blur', () => {
-        getTypedObjectKeys(moveState).forEach(directionName => {
-            moveState[directionName].active = false
-        })
-    })
-    function toggleDirectionMovement(keyCode : string, active: boolean) {
-        for (const directionName in moveState) {
-            const direction = moveState[directionName as keyof typeof moveState]
-            if(keyCode.toUpperCase() === 'KEY' + direction.key) {
-                direction.active = active
-            }
-        }
-    }
 }
 
 export function updatePlayerPosition() {
