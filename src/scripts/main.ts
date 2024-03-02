@@ -3,6 +3,12 @@ import '@/styles/main.css'
 import { GameObject, objects } from '@/scripts/game-objects'
 import { initializePlayer, updatePlayerPosition } from '@/scripts/player'
 
+const startGameButton = document.querySelector('#startGameButton')
+const titleScreen = document.querySelector('#titleScreen')
+startGameButton?.addEventListener('click', () => {
+  initializeGame()  
+})
+
 function initializeGame() {
     document.querySelector('#globalContainer')?.insertAdjacentHTML('beforeend', `
         <div id="stage" class="relative h-full overflow-hidden"></div>
@@ -24,6 +30,6 @@ function initializeGame() {
 
         requestAnimationFrame(update)
     }
-}
 
-initializeGame()
+    titleScreen?.classList.add('-translate-y-full')
+}
