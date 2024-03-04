@@ -31,7 +31,10 @@ function toggleDirectionMovement(keyCode : string, active: boolean) {
 }
 
 export function initializePlayer() {
-    player = new GameObject(52, 82, { x: 10, y: 10 }, { domElementClass: 'player-container' })
+    player = new GameObject(52, 82, { x: 10, y: 10 }, {
+        domElementClass: 'player-container',
+        collision: { bottomCollisionTrigger: 'bottom' }
+    })
 
     player.domElement.insertAdjacentHTML('afterbegin', `
         <div class="player-sprite"></div>
@@ -66,19 +69,22 @@ export function updatePlayerPosition() {
         movePixelsAmount = movePixelsAmount * 0.75
     }
 
-    if(moveState.left.active) {
-        player.setPosition({ x: playerPosition.x - movePixelsAmount })
+    try {
+        if(moveState.left.active) {
+            player.setPosition({ x: playerPosition.x - movePixelsAmount })
+        }
+    
+        if(moveState.top.active) {
+            player.setPosition({ y: playerPosition.y - movePixelsAmount })
+        }
+    
+        if(moveState.right.active) {
+            player.setPosition({ x: playerPosition.x + movePixelsAmount })
+        }
+    
+        if(moveState.bottom.active) {
+            player.setPosition({ y: playerPosition.y + movePixelsAmount })
+        }
     }
-
-    if(moveState.top.active) {
-        player.setPosition({ y: playerPosition.y - movePixelsAmount })
-    }
-
-    if(moveState.right.active) {
-        player.setPosition({ x: playerPosition.x + movePixelsAmount })
-    }
-
-    if(moveState.bottom.active) {
-        player.setPosition({ y: playerPosition.y + movePixelsAmount })
-    }
+    catch(error) {}
 }

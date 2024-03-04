@@ -2,8 +2,7 @@ import '@/styles/main.css'
 
 import { GameObject, objects } from '@/scripts/game-objects'
 import { initializePlayer, updatePlayerPosition } from '@/scripts/player'
-
-const titleScreen = document.querySelector('#titleScreen')
+import { getRandomInteger } from '@/scripts/utils/get-random-integer'
 
 const startGameButton = document.querySelector('#startGameButton')
 startGameButton?.addEventListener('click', () => {
@@ -16,29 +15,27 @@ restartButton?.addEventListener('click', () => {
 })
 
 let currentUpdateFrameId : number | undefined = undefined
+
 function initializeGame() {
     document.querySelector('#globalContainer')?.insertAdjacentHTML('beforeend', `
         <div id="stage" class="relative h-full overflow-hidden"></div>
     `)
+    const stage = document.querySelector('#stage') as HTMLDivElement
 
     initializePlayer()
+    addRocks()
 
-    const chest = new GameObject(64, 64, { x: 300, y: 200 }, {
-        domElementClass: 'chest',
-        doOnCollision(collidedObject) {
-            // collidedObject.setPosition({ x: 500, y: 200 })
-        },
-    })
-
-    currentUpdateFrameId = requestAnimationFrame(update)
-    function update() {
-        updatePlayerPosition()
-        objects.forEach(gameObject => gameObject.update())
-
+    setTimeout(() => {
         currentUpdateFrameId = requestAnimationFrame(update)
-    }
+        function update() {
+            updatePlayerPosition()
+            objects.forEach(gameObject => gameObject.update())
 
-    titleScreen?.classList.add('-translate-y-full')
+            currentUpdateFrameId = requestAnimationFrame(update)
+        }
+    }, 200)
+
+    document.querySelector('#titleScreen')?.classList.add('-translate-y-full')
 }
 
 function resetGame() {
@@ -52,4 +49,17 @@ function resetGame() {
     document.querySelector('#stage')?.remove()
 
     initializeGame()
+}
+
+function addRocks() {
+    for (let rockCount = 0; rockCount < 13; rockCount++) {
+        try {
+            const rock = new GameObject(56, 120, { x: getRandomInteger(66, window.innerWidth - 66), y: getRandomInteger(130, window.innerHeight - 130) }, {
+                domElementClass: 'rock',
+            })
+        }
+        catch(error) {}
+    }
+    
+    console.log(objects)
 }

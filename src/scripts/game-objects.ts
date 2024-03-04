@@ -1,9 +1,19 @@
 import { Position } from '@/scripts/types/position';
 
+export class CollisionError extends Error {
+    constructor() {
+        super(`position cant be set because it intersects `
+            + 'with another or screen bounds')
+    }
+}
+
 interface GameObjectOptions {
     domElementClass?: string;
-    disableCollision?: boolean;
-    doOnCollision?: (collidedObject: GameObject) => void;
+    collision?: {
+        disabled?: boolean;
+        doWhenObjectCollided?: (collidedObject: GameObject) => void;
+        bottomCollisionTrigger?: 'top' | 'bottom';
+    }
 }
 
 export const objects : GameObject[] = []
@@ -22,14 +32,20 @@ export class GameObject {
         this.domElement = document.createElement('div')
         this.domElement.style.width = this.width + 'px'
         this.domElement.style.height = this.height + 'px'
+        this.domElement.setAttribute('id', `object${this.id}`)
         
         this.domElement.classList.add('object')
         if(this.options?.domElementClass) {
             this.domElement.classList.add(this.options.domElementClass)
         }
         
-        this.domElement.style.top = this.position.y + 'px'
-        this.domElement.style.left = this.position.x + 'px'
+        try {
+            this.setPosition(this.position)
+        }
+        catch(error) {
+            console.log('collision at ' + this.position.x, this.position.y)
+            throw error
+        }
 
         const stageElement =  document.querySelector('#stage') as HTMLDivElement | null
         if(!stageElement) {
@@ -49,35 +65,43 @@ export class GameObject {
     setPosition(newPosition: Partial<Position>) {
         if(newPosition.x !== undefined && (newPosition.x + this.width > this.stage?.clientWidth
             || newPosition.x < 0)) {
-            return
+            throw new CollisionError()
         }
          
         if(newPosition.y !== undefined && (newPosition.y + this.height > this.stage?.clientHeight
             || newPosition.y < 0)) {
-            return
+            throw new CollisionError()
         }
-        
-        const xCollisionObject = objects.find(object => {
+
+        const bottomCollisionOffset =
+            this.options?.collision?.bottomCollisionTrigger === 'bottom' ? this.height : 0
+
+        const xCollisionObjects = objects.filter(object => {
             const newX = newPosition.x || this.position.x
             return object.id !== this.id
                 && (newX + this.width >= object.position.x
                 && newX <= object.position.x + object.width)
         })
-        const yCollisionObject = objects.find(object => {
+        const yCollisionObjects = objects.filter(object => {
             const newY = newPosition.y || this.position.y
             return object.id !== this.id
-                && (newY + this.height >= object.position.y && newY <= object.position.y)
+                && (newY + this.height >= object.position.y
+                && newY + bottomCollisionOffset <= object.position.y + object.height)
         })
 
-        const collisionEnabled = !this.options?.disableCollision && !xCollisionObject?.options?.disableCollision
-        if(xCollisionObject && yCollisionObject && xCollisionObject.id === yCollisionObject.id
-            && collisionEnabled) {
+        const bothAxesCollisionObject = xCollisionObjects.find(object => {
+            return yCollisionObjects.some(yCollisionObject => yCollisionObject.id === object.id)
+        })
 
-            if(xCollisionObject.options?.doOnCollision) {
-                xCollisionObject.options.doOnCollision(this)
+        if(bothAxesCollisionObject
+            && !this.options?.collision?.disabled 
+            && !bothAxesCollisionObject.options?.collision?.disabled) {    
+
+            if(bothAxesCollisionObject.options?.collision?.doWhenObjectCollided) {
+                bothAxesCollisionObject.options.collision.doWhenObjectCollided(this)
             }
 
-            return
+            throw new CollisionError()
         }
 
         this.position.x = newPosition.x !== undefined ? newPosition.x : this.position.x

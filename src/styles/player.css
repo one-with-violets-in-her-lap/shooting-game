@@ -6,7 +6,7 @@
 .player-sprite {
     position: absolute;
 
-    top: -45px;
+    top: -38px;
     left: 50%;
     transform: translateX(-50%);
     width: 128px;
@@ -17,6 +17,9 @@
 
     filter: drop-shadow(-4px 24px 4px #00000080);
 }
+/* .enemy-sprite {
+    filter: drop-shadow(-4px 24px 4px #00000080) hue-rotate(-290deg);
+} */
 
 .player-container:not([direction="none"]) .player-sprite {
     background-size: 512px;
