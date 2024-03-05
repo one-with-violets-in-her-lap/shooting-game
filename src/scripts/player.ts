@@ -1,7 +1,7 @@
 import { GameObject } from '@/scripts/game-objects'
 import { getTypedObjectKeys } from '@/scripts/utils/get-typed-object-keys'
 
-let player : GameObject | undefined = undefined
+export let player : GameObject | undefined = undefined
 
 const moveState = {
     left: { active: false, key: 'A' },

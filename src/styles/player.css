@@ -17,9 +17,9 @@
 
     filter: drop-shadow(-4px 24px 4px #00000080);
 }
-/* .enemy-sprite {
-    filter: drop-shadow(-4px 24px 4px #00000080) hue-rotate(-290deg);
-} */
+.enemy-sprite {
+    filter: drop-shadow(-4px 24px 4px rgba(0, 217, 255, 0.253)) hue-rotate(-290deg);
+}
 
 .player-container:not([direction="none"]) .player-sprite {
     background-size: 512px;
