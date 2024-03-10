@@ -1,19 +1,63 @@
-import { GameObject } from '@/scripts/game-objects.ts'
-import { player } from '@/scripts/player'
+import { Entity } from '@/scripts/entity'
+import { GameObject, GameObjectOptions } from '@/scripts/game-objects.ts'
+import { Player, player } from '@/scripts/player'
 import { Position } from '@/scripts/types/position'
 
-export class Enemy extends GameObject {
-    private lastMoveAxis = 'y'
+export class Enemy extends Entity {
+    private static readonly MAX_HEALTH_POINTS = 5
+    private canDamage = true
 
     constructor(position: Position) {
-        super(52, 82, position, {
-            domElementClass: 'player-container',
+        /* super(52, 82, position, {
+            domElementClass: 'entity-container',
+            collision: {
+                doWhenCollidedIntoObject: (targetObject: GameObject) => {
+                    if(targetObject instanceof Player && this.canDamage) {
+                        try {
+                            targetObject.setHealth(targetObject.getHealth() - 1)
+                            this.canDamage = false
+                            window.setTimeout(() => {
+                                this.canDamage = true
+                            }, 700)
+                        }
+                        catch(error) {
+                            console.log(error)
+                        }
+                    }
+                },
+            }
         })
         
         this.domElement.insertAdjacentHTML('afterbegin', `
-            <div class="player-sprite enemy-sprite"></div>
+            <div class="entity-sprite enemy-sprite"></div>
         `)
         this.domElement.setAttribute('direction', 'bottom')
+        this.domElement.setAttribute('walking', '') */
+
+        const objectOptions: GameObjectOptions = {
+            collision: {
+                doWhenCollidedIntoObject: (targetObject: GameObject) => {
+                    if(targetObject instanceof Player && this.canDamage) {
+                        try {
+                            targetObject.setHealth(targetObject.getHealth() - 1)
+                            this.canDamage = false
+                            window.setTimeout(() => {
+                                this.canDamage = true
+                            }, 700)
+                        }
+                        catch(error) {
+                            console.log(error)
+                        }
+                    }
+                },
+            }
+        }
+        super(position, Enemy.MAX_HEALTH_POINTS, {
+            spriteElementClass: 'enemy-sprite',
+            noHealthBar: true,
+            objectOptions
+        })
+
         this.domElement.setAttribute('walking', '')
     }
 
@@ -44,7 +88,9 @@ export class Enemy extends GameObject {
                 newPosition.y = newPosition.y - 1
             }
 
-            this.domElement.setAttribute('direction', newDirection || 'none')
+            if(newDirection) {
+                this.domElement.setAttribute('direction', newDirection)
+            }
 
             try {
                 this.setPosition(newPosition)

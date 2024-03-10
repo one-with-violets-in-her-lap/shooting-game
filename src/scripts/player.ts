@@ -1,7 +1,7 @@
+import { Entity } from '@/scripts/entity'
+import { resetGame } from '@/scripts/game'
 import { GameObject } from '@/scripts/game-objects'
 import { getTypedObjectKeys } from '@/scripts/utils/get-typed-object-keys'
-
-export let player : GameObject | undefined = undefined
 
 const moveState = {
     left: { active: false, key: 'A' },
@@ -30,61 +30,89 @@ function toggleDirectionMovement(keyCode : string, active: boolean) {
     }
 }
 
-export function initializePlayer() {
-    player = new GameObject(52, 82, { x: 10, y: 10 }, {
-        domElementClass: 'player-container',
-        collision: { bottomCollisionTrigger: 'bottom' }
-    })
+export class Player extends Entity {
+    private static readonly MAX_HEALTH_POINTS = 5
 
-    player.domElement.insertAdjacentHTML('afterbegin', `
-        <div class="player-sprite"></div>
-    `)
-    player.domElement.setAttribute('direction', 'bottom')
+    constructor() {
+        /* super(52, 82, { x: 10, y: 10 }, {
+            domElementClass: 'entity-container',
+            collision: { bottomCollisionTrigger: 'bottom' }
+        })
+
+        this.domElement.insertAdjacentHTML('afterbegin', `
+            <div class="entity-sprite"></div>
+        `)
+        this.setHealth(this.MAX_HEALTH_POINTS)
+
+        this.domElement.setAttribute('direction', 'bottom') */
+        super({ x: 10, y: 10 }, Player.MAX_HEALTH_POINTS, {
+            doOnDeath() {
+                const titleScreen = document.querySelector('#titleScreen') as HTMLElement
+                const heading = titleScreen.querySelector('h1') as HTMLHeadingElement
+                const startButton = titleScreen.querySelector('button') as HTMLButtonElement
+
+                titleScreen?.classList.remove('closed')
+                heading.textContent = 'imagine dying at this game'
+                startButton.textContent = 'restart'
+
+                setTimeout(() => {
+                    resetGame()
+                }, 500)
+            },
+            objectOptions: {
+                collision: { bottomCollisionTrigger: 'bottom' }
+            }
+        })
+    }
+
+    update() {
+        const playerPosition = this.getPosition()
+        const playerElement = this.domElement
+        
+        let movePixelsAmount = 6
+
+        const activeDirections = Object.keys(moveState).filter(directionName =>
+            moveState[directionName as keyof typeof moveState].active
+        )
+
+        if(activeDirections[0]) {
+            playerElement.setAttribute('direction', activeDirections[0])
+            playerElement.setAttribute('walking', '')
+        }
+        else {
+            playerElement.removeAttribute('walking')
+        }
+
+        // slow down if moving diagonally
+        if(activeDirections.length > 1) {
+            movePixelsAmount = movePixelsAmount * 0.75
+        }
+
+        try {
+            if(moveState.left.active) {
+                this.setPosition({ x: playerPosition.x - movePixelsAmount })
+            }
+        
+            if(moveState.top.active) {
+                this.setPosition({ y: playerPosition.y - movePixelsAmount })
+            }
+        
+            if(moveState.right.active) {
+                this.setPosition({ x: playerPosition.x + movePixelsAmount })
+            }
+                
+            if(moveState.bottom.active) {
+                this.setPosition({ y: playerPosition.y + movePixelsAmount })
+            }
+        }
+        catch(error) {}
+
+        super.update()
+    }
 }
 
-export function updatePlayerPosition() {
-    if(!player) {
-        return
-    }
+export let player : Player | undefined = undefined
 
-    const playerPosition = player.getPosition()
-    const playerElement = player.domElement
-    
-    let movePixelsAmount = 6
-
-    const activeDirections = Object.keys(moveState).filter(directionName =>
-        moveState[directionName as keyof typeof moveState].active
-    )
-
-    if(activeDirections[0]) {
-        playerElement.setAttribute('direction', activeDirections[0])
-        playerElement.setAttribute('walking', '')
-    }
-    else {
-        playerElement.removeAttribute('walking')
-    }
-
-    // slow down if moving diagonally
-    if(activeDirections.length > 1) {
-        movePixelsAmount = movePixelsAmount * 0.75
-    }
-
-    try {
-        if(moveState.left.active) {
-            player.setPosition({ x: playerPosition.x - movePixelsAmount })
-        }
-    
-        if(moveState.top.active) {
-            player.setPosition({ y: playerPosition.y - movePixelsAmount })
-        }
-    
-        if(moveState.right.active) {
-            player.setPosition({ x: playerPosition.x + movePixelsAmount })
-        }
-    
-        if(moveState.bottom.active) {
-            player.setPosition({ y: playerPosition.y + movePixelsAmount })
-        }
-    }
-    catch(error) {}
+export function initializePlayer() {
+    player = new Player()
 }

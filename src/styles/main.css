@@ -10,13 +10,13 @@
     background-size: 600px 450px;
 }
 
+#titleScreen.closed {
+    @apply -translate-y-full;
+}
+
 .object {
     position: absolute;
     background-size: 100% 100%;
-}
-
-.chest {
-    background-image: url('../assets/images/chest.png');
 }
 
 .rock {

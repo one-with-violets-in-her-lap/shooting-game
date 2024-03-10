@@ -7,11 +7,12 @@ export class CollisionError extends Error {
     }
 }
 
-interface GameObjectOptions {
+export interface GameObjectOptions {
     domElementClass?: string;
     collision?: {
         disabled?: boolean;
         doWhenObjectCollided?: (collidedObject: GameObject) => void;
+        doWhenCollidedIntoObject?: (targetObject: GameObject) => void;
         bottomCollisionTrigger?: 'top' | 'bottom';
     }
 }
@@ -95,10 +96,14 @@ export class GameObject {
 
         if(bothAxesCollisionObject
             && !this.options?.collision?.disabled 
-            && !bothAxesCollisionObject.options?.collision?.disabled) {    
+            && !bothAxesCollisionObject.options?.collision?.disabled) {
 
             if(bothAxesCollisionObject.options?.collision?.doWhenObjectCollided) {
                 bothAxesCollisionObject.options.collision.doWhenObjectCollided(this)
+            }
+
+            if(this.options?.collision?.doWhenCollidedIntoObject) { 
+                this.options.collision.doWhenCollidedIntoObject(bothAxesCollisionObject)
             }
 
             throw new CollisionError()
