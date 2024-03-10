@@ -63,6 +63,7 @@ export class Enemy extends Entity {
 
     update() {
         const currentPosition = this.getPosition()
+        const MOVE_PIXELS_AMOUNT = 2
         
         if(player) {
             const playerPosition = player.getPosition()
@@ -72,20 +73,20 @@ export class Enemy extends Entity {
 
             if(currentPosition.x < playerPosition.x) {
                 newDirection = 'right'
-                newPosition.x = newPosition.x + 1
+                newPosition.x = newPosition.x + MOVE_PIXELS_AMOUNT
             }
             else if(currentPosition.x > playerPosition.x) {
                 newDirection = 'left'
-                newPosition.x = newPosition.x - 1
+                newPosition.x = newPosition.x - MOVE_PIXELS_AMOUNT
             }
 
             if(currentPosition.y < playerPosition.y) {
                 newDirection = 'bottom'
-                newPosition.y = newPosition.y + 1
+                newPosition.y = newPosition.y + MOVE_PIXELS_AMOUNT
             }
             else if(currentPosition.y > playerPosition.y) {
                 newDirection = 'top'
-                newPosition.y = newPosition.y - 1
+                newPosition.y = newPosition.y - MOVE_PIXELS_AMOUNT
             }
 
             if(newDirection) {
