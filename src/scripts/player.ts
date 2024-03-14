@@ -54,9 +54,11 @@ export class Player extends Entity {
                 titleScreen?.classList.remove('closed')
                 heading.textContent = 'imagine dying at this game'
                 startButton.textContent = 'restart'
+                startButton.style.pointerEvents = 'none'
 
                 setTimeout(() => {
                     resetGame()
+                    startButton.style.pointerEvents = 'auto'
                 }, 500)
             },
             objectOptions: {
