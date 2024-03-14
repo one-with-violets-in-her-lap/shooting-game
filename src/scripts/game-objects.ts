@@ -1,7 +1,7 @@
 import { Position } from '@/scripts/types/position';
 
 export class CollisionError extends Error {
-    constructor() {
+    constructor(public readonly object?: GameObject) {
         super(`position cant be set because it intersects `
             + 'with another or screen bounds')
     }
@@ -25,7 +25,7 @@ export class GameObject {
     readonly domElement: HTMLDivElement
     readonly stage: HTMLDivElement
 
-    constructor(private readonly width: number, private readonly height: number,
+    constructor(public readonly width: number, public readonly height: number,
         private readonly position:  Position, private readonly options?: GameObjectOptions) {
 
         this.id = lastObjectId++
@@ -106,7 +106,7 @@ export class GameObject {
                 this.options.collision.doWhenCollidedIntoObject(bothAxesCollisionObject)
             }
 
-            throw new CollisionError()
+            throw new CollisionError(bothAxesCollisionObject)
         }
 
         this.position.x = newPosition.x !== undefined ? newPosition.x : this.position.x
