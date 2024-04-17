@@ -1,12 +1,16 @@
 .entity-container {
     transition: transform 0.3s ease;
     transform-style: preserve-3d;
+
 }
 .entity-container.dying {
     transition: all 2s ease;
     filter: blur(10px);
     opacity: 0.2;
     transform: translateY(-100vh);
+}
+.entity-container.animated-teleporting {
+    transition: all 0.4s ease;
 }
 
 .entity-sprite {

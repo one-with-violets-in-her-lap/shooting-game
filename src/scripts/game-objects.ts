@@ -26,7 +26,7 @@ export class GameObject {
     readonly stage: HTMLDivElement
 
     constructor(public readonly width: number, public readonly height: number,
-        private readonly position:  Position, private readonly options?: GameObjectOptions) {
+        private readonly position:  Position, public readonly options?: GameObjectOptions) {
 
         this.id = lastObjectId++
 

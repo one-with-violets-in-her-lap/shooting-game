@@ -9,7 +9,6 @@ export function initializeGame() {
     document.querySelector('#globalContainer')?.insertAdjacentHTML('beforeend', `
         <div id="stage" class="relative h-full overflow-hidden"></div>
     `)
-    const stage = document.querySelector('#stage') as HTMLDivElement
 
     initializePlayer()
     addRocks()
@@ -38,11 +37,24 @@ export function resetGame() {
 }
 
 function addRocks() {
-    for(let rockCount = 0; rockCount < 13; rockCount++) {
+    const stage = document.querySelector('#stage') as HTMLDivElement
+
+    const MAX_ROCKS = 13
+    const ROCKS_X_BOUNDS = { min: 66, max: stage.clientWidth - 66 }
+    const ROCKS_Y_BOUNDS = { min: 100, max: stage.clientHeight - 100 }
+    const ROCK_SIZE = { width: 56, height: 120 }
+    
+    for(let rockCount = 0; rockCount < MAX_ROCKS; rockCount++) {
         try {
             const rock = new GameObject(56, 120, {
-                x: getRandomInteger(66, window.innerWidth - 66),
-                y: getRandomInteger(130, window.innerHeight - 130)
+                x: getRandomInteger(
+                    ROCKS_X_BOUNDS.min + ROCK_SIZE.width,
+                    ROCKS_X_BOUNDS.max - ROCK_SIZE.width
+                ),
+                y: getRandomInteger(
+                    ROCKS_Y_BOUNDS.min + ROCK_SIZE.height,
+                    ROCKS_Y_BOUNDS.max - ROCK_SIZE.height
+                ),
             }, {
                 domElementClass: 'rock',
             })
@@ -52,7 +64,7 @@ function addRocks() {
 
     setInterval(() => {
         const enemyCount = objects.filter(object => object instanceof Enemy).length
-        const MAX_ENEMY_COUNT = 15
+        const MAX_ENEMY_COUNT = 1
 
         try {
             for (let newEnemyCount = 0; newEnemyCount < MAX_ENEMY_COUNT - enemyCount; newEnemyCount++) {
