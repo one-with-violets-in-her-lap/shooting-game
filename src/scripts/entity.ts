@@ -17,7 +17,7 @@ export class Entity extends GameObject {
 
         super(52, 82, position, {
             domElementClass: 'entity-container',
-            ...entityOptions?.objectOptions            
+            ...entityOptions?.objectOptions
         })
 
         this.entityOptions = entityOptions
@@ -35,7 +35,7 @@ export class Entity extends GameObject {
             throw RangeError('player health must be a maximum of ' + this.maxHealth)
         }
         this.healthPoints = newHealth
-        
+
         if(!this.entityOptions?.noHealthBar) {
             this.domElement.querySelector('#playerHealthBar')?.remove()
             this.domElement.insertAdjacentHTML('afterbegin', `
@@ -53,7 +53,7 @@ export class Entity extends GameObject {
                 if(this.entityOptions?.doOnDeath) {
                     this.entityOptions.doOnDeath(this)
                 }
-                
+
                 this.destroy()
             }, 1000)
         }
