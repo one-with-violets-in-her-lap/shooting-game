@@ -34,17 +34,6 @@ export class Player extends Entity {
     private static readonly MAX_HEALTH_POINTS = 5
 
     constructor() {
-        /* super(52, 82, { x: 10, y: 10 }, {
-            domElementClass: 'entity-container',
-            collision: { bottomCollisionTrigger: 'bottom' }
-        })
-
-        this.domElement.insertAdjacentHTML('afterbegin', `
-            <div class="entity-sprite"></div>
-        `)
-        this.setHealth(this.MAX_HEALTH_POINTS)
-
-        this.domElement.setAttribute('direction', 'bottom') */
         super({ x: 10, y: 10 }, Player.MAX_HEALTH_POINTS, {
             doOnDeath() {
                 const titleScreen = document.querySelector('#titleScreen') as HTMLElement
