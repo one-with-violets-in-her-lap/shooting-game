@@ -40,14 +40,23 @@ export class Enemy extends Entity {
     async setPositionWithAnimation(newPosition: Partial<Position>) {
         await wait(0.1)
 
-        this.moving = false
-        this.domElement.classList.add('animated-teleporting')
-        this.setPosition(newPosition)
+        try {
+            this.moving = false
+            this.domElement.classList.add('animated-teleporting')
+            this.setPosition(newPosition)
 
-        setTimeout(() => {
-            this.domElement.classList.remove('animated-teleporting')
-            this.moving = true
-        }, 400)
+            setTimeout(() => {
+                this.domElement.classList.remove('animated-teleporting')
+                this.moving = true
+            }, 400)
+        }
+        catch(error) {
+            if(error instanceof CollisionError) {
+                this.domElement.classList.remove('animated-teleporting')
+                this.moving = true
+                throw error
+            }
+        }
     }
 
     update() {
@@ -60,15 +69,6 @@ export class Enemy extends Entity {
             const newPosition = { x: currentPosition.x, y: currentPosition.y }
             let newDirection: Direction | undefined = undefined
 
-            if(currentPosition.x < playerPosition.x) {
-                newDirection = 'right'
-                newPosition.x = newPosition.x + MOVE_PIXELS_AMOUNT
-            }
-            else if(currentPosition.x > playerPosition.x) {
-                newDirection = 'left'
-                newPosition.x = newPosition.x - MOVE_PIXELS_AMOUNT
-            }
-
             if(currentPosition.y < playerPosition.y) {
                 newDirection = 'bottom'
                 newPosition.y = newPosition.y + MOVE_PIXELS_AMOUNT
@@ -76,6 +76,17 @@ export class Enemy extends Entity {
             else if(currentPosition.y > playerPosition.y) {
                 newDirection = 'top'
                 newPosition.y = newPosition.y - MOVE_PIXELS_AMOUNT
+            }
+
+            if(currentPosition.x <= playerPosition.x || currentPosition.x >= playerPosition.x + player.width) {
+                if(currentPosition.x < playerPosition.x) {
+                    newDirection = 'right'
+                    newPosition.x = newPosition.x + MOVE_PIXELS_AMOUNT
+                }
+                else if(currentPosition.x > playerPosition.x) {
+                    newDirection = 'left'
+                    newPosition.x = newPosition.x - MOVE_PIXELS_AMOUNT
+                }
             }
 
             if(!newDirection) {
@@ -101,7 +112,7 @@ export class Enemy extends Entity {
         const currentPosition = this.getPosition()
         const collisionObject = collisionError.object
 
-        if(!collisionObject) {
+        if(!collisionObject || collisionObject instanceof Player) {
             return
         }
 
@@ -120,30 +131,42 @@ export class Enemy extends Entity {
                 newPosition.x = collisionObjectPosition.x - collisionObject.width
             }
             else if(direction === 'right') {
-                newPosition.y = collisionObjectPosition.x + collisionObject.width
+                newPosition.x = collisionObjectPosition.x + collisionObject.width
                     + this.width
             }
 
-            console.log(newPosition)
+            console.log(direction, newPosition)
 
             await this.setPositionWithAnimation(newPosition)
         }
         catch(error) {
-            const newPosition = { ...currentPosition }
-            if(direction === 'top') {
-                newPosition.y = 0
+            /*
+                if collided into another object, the function calls itself
+                if collided into screen bounds enemy moves to the corners of the screen
+            */
+            if(error instanceof CollisionError && error.object) {
+                this.escapeCollision(error, direction)
             }
-            else if(direction === 'bottom') {
-                newPosition.y = this.stage.clientHeight - this.height
-            }
-            else if(direction === 'left') {
-                newPosition.x = 0
-            }
-            else if(direction === 'right') {
-                newPosition.y = this.stage.clientWidth - this.width
-            }
+            else {
+                const resetPosition = { x: 0, y: 0 }
+                if(direction === 'top') {
+                    resetPosition.y = 0
+                }
+                else if(direction === 'bottom') {
+                    resetPosition.y = this.stage.clientHeight - this.height
+                }
+                else if(direction === 'left') {
+                    resetPosition.x = 0
+                }
+                else if(direction === 'right') {
+                    resetPosition.x = this.stage.clientWidth - this.width
+                }
 
-            this.setPositionWithAnimation(newPosition)
+                try {
+                    await this.setPositionWithAnimation(resetPosition)
+                }
+                catch(error) {}
+            }
         }
     }
 }
