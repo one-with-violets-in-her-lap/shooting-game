@@ -11,8 +11,9 @@ export function initializeGame() {
     `)
 
     initializePlayer()
-    addRocks()
+    addEnvironmentObjects()
 
+    // delay fixes immediate player walking when restarting the game 
     setTimeout(() => {
         currentUpdateFrameId = requestAnimationFrame(update)
         function update() {
@@ -36,7 +37,7 @@ export function resetGame() {
     document.querySelector('#stage')?.remove()
 }
 
-function addRocks() {
+function addEnvironmentObjects() {
     const stage = document.querySelector('#stage') as HTMLDivElement
 
     const MAX_ROCKS = 13
@@ -64,7 +65,7 @@ function addRocks() {
 
     setInterval(() => {
         const enemyCount = objects.filter(object => object instanceof Enemy).length
-        const MAX_ENEMY_COUNT = 1
+        const MAX_ENEMY_COUNT = 3
 
         try {
             for (let newEnemyCount = 0; newEnemyCount < MAX_ENEMY_COUNT - enemyCount; newEnemyCount++) {
