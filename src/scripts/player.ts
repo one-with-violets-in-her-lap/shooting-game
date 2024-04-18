@@ -1,4 +1,5 @@
 import WalkingSound from '@/assets/audio/walking.mp3'
+import DamageAudio from '@/assets/audio/damage.mp3'
 
 import { Entity } from '@/scripts/entity'
 import { resetGame } from '@/scripts/game'
@@ -34,7 +35,9 @@ function toggleDirectionMovement(keyCode: string, active: boolean) {
 
 export class Player extends Entity {
     private static readonly MAX_HEALTH_POINTS = 5
-    private walkingAudio: HTMLAudioElement
+
+    private walkingAudio
+    private damageAudio
 
     constructor() {
         super({ x: 10, y: 10 }, Player.MAX_HEALTH_POINTS, {
@@ -61,6 +64,9 @@ export class Player extends Entity {
         this.walkingAudio = new Audio(WalkingSound)
         this.walkingAudio.loop = true
         this.walkingAudio.volume = 0.2
+
+        this.damageAudio = new Audio(DamageAudio)
+        this.damageAudio.volume = 0.05
     }
 
     update() {
@@ -109,6 +115,13 @@ export class Player extends Entity {
         catch(error) {}
 
         super.update()
+    }
+
+    setHealth(newHealth: number, hurt?: boolean): void {
+        super.setHealth(newHealth)
+        if(hurt && newHealth >= 0) {
+            this.damageAudio.play()
+        }
     }
 }
 

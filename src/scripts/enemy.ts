@@ -15,7 +15,7 @@ export class Enemy extends Entity {
                 doWhenCollidedIntoObject: (targetObject: GameObject) => {
                     if(targetObject instanceof Player && this.canDamage) {
                         try {
-                            targetObject.setHealth(targetObject.getHealth() - 1)
+                            targetObject.setHealth(targetObject.getHealth() - 1, true)
                             this.canDamage = false
                             window.setTimeout(() => {
                                 this.canDamage = true
