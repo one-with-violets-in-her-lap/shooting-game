@@ -1,3 +1,5 @@
+import WalkingSound from '@/assets/audio/walking.mp3'
+
 import { Entity } from '@/scripts/entity'
 import { resetGame } from '@/scripts/game'
 import { GameObject } from '@/scripts/game-objects'
@@ -21,7 +23,7 @@ window.addEventListener('blur', () => {
         moveState[directionName].active = false
     })
 })
-function toggleDirectionMovement(keyCode : string, active: boolean) {
+function toggleDirectionMovement(keyCode: string, active: boolean) {
     for (const directionName in moveState) {
         const direction = moveState[directionName as keyof typeof moveState]
         if(keyCode.toUpperCase() === 'KEY' + direction.key) {
@@ -32,6 +34,7 @@ function toggleDirectionMovement(keyCode : string, active: boolean) {
 
 export class Player extends Entity {
     private static readonly MAX_HEALTH_POINTS = 5
+    private walkingAudio: HTMLAudioElement
 
     constructor() {
         super({ x: 10, y: 10 }, Player.MAX_HEALTH_POINTS, {
@@ -54,6 +57,10 @@ export class Player extends Entity {
                 collision: { bottomCollisionTrigger: 'bottom' }
             }
         })
+
+        this.walkingAudio = new Audio(WalkingSound)
+        this.walkingAudio.loop = true
+        this.walkingAudio.volume = 0.2
     }
 
     update() {
@@ -69,9 +76,12 @@ export class Player extends Entity {
         if(activeDirections[0]) {
             playerElement.setAttribute('direction', activeDirections[0])
             playerElement.setAttribute('walking', '')
+
+            this.walkingAudio.play()
         }
         else {
             playerElement.removeAttribute('walking')
+            this.walkingAudio.pause()
         }
 
         // slow down if moving diagonally
