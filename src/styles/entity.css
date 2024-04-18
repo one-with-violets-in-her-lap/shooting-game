@@ -1,7 +1,7 @@
 .entity-container {
+    z-index: 2;
     transition: transform 0.3s ease;
     transform-style: preserve-3d;
-
 }
 .entity-container.dying {
     transition: all 2s ease;
@@ -11,6 +11,8 @@
 }
 .entity-container.animated-teleporting {
     transition: all 0.4s ease;
+    filter: blur(2px);
+    opacity: 0.6;
 }
 
 .entity-sprite {
