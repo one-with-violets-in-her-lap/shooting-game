@@ -115,6 +115,12 @@ export class Player extends Entity {
 
         super.update()
     }
+
+    destroy() {
+        this.walkingAudio.pause()
+        this.walkingAudio.remove()
+        super.destroy()
+    }
 }
 
 export let player : Player | undefined = undefined
