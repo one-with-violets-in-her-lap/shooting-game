@@ -32,6 +32,10 @@
     background-size: 256px;
     background-repeat: no-repeat;
     background-position: 0px;
+    filter:
+        drop-shadow(10px 20px 2px #f5b47740)
+        drop-shadow(0 10px 2px #f5b47740)
+        drop-shadow(-10px 28px 2px #f5b47740);
     animation: bullet-spritesheet-animation steps(4) 0.8s infinite;
 }
 
