@@ -38,7 +38,6 @@ export class Player extends Entity {
     private static readonly MAX_HEALTH_POINTS = 5
 
     private walkingAudio
-    private damageAudio
 
     constructor() {
         super({ x: 10, y: 10 }, Player.MAX_HEALTH_POINTS, {
@@ -66,9 +65,6 @@ export class Player extends Entity {
         this.walkingAudio.loop = true
         this.walkingAudio.volume = 0.2
 
-        this.damageAudio = new Audio(DamageAudio)
-        this.damageAudio.volume = 0.05
-        
         new Gun(this)
     }
 
@@ -118,13 +114,6 @@ export class Player extends Entity {
         catch(error) {}
 
         super.update()
-    }
-
-    setHealth(newHealth: number, hurt?: boolean): void {
-        super.setHealth(newHealth)
-        if(hurt && newHealth >= 0) {
-            this.damageAudio.play()
-        }
     }
 }
 

@@ -1,3 +1,5 @@
+import DamageAudio from '@/assets/audio/damage.mp3'
+
 import { GameObject, GameObjectOptions } from '@/scripts/game-objects'
 import { Position } from '@/scripts/types/position'
 
@@ -11,6 +13,8 @@ interface EntityOptions {
 export class Entity extends GameObject {
     private readonly entityOptions?: EntityOptions
     private healthPoints: number = 0
+
+    private damageAudio
 
     constructor(position: Position, private readonly maxHealth: number,
         entityOptions?: EntityOptions) {
@@ -28,9 +32,12 @@ export class Entity extends GameObject {
         this.domElement.setAttribute('direction', 'bottom')
 
         this.setHealth(maxHealth)
+
+        this.damageAudio = new Audio(DamageAudio)
+        this.damageAudio.volume = 0.05
     }
 
-    setHealth(newHealth: number) {
+    setHealth(newHealth: number, hurt?: boolean) {
         if(newHealth > this.maxHealth) {
             throw RangeError('player health must be a maximum of ' + this.maxHealth)
         }
@@ -48,6 +55,8 @@ export class Entity extends GameObject {
         }
 
         if(newHealth <= 0) {
+            console.log('bye')
+            
             this.domElement.classList.add('dying')
             setTimeout(() => {
                 if(this.entityOptions?.doOnDeath) {
@@ -56,6 +65,10 @@ export class Entity extends GameObject {
 
                 this.destroy()
             }, 1000)
+        }
+
+        if(hurt && newHealth >= 0) {
+            this.damageAudio.play()
         }
     }
 
