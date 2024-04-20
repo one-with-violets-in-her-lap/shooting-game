@@ -135,8 +135,6 @@ export class Enemy extends Entity {
                     + this.width
             }
 
-            console.log(direction, newPosition)
-
             await this.setPositionWithAnimation(newPosition)
         }
         catch(error) {
