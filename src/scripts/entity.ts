@@ -4,7 +4,7 @@ import { Position } from '@/scripts/types/position'
 interface EntityOptions {
     doOnDeath?: (entity: Entity) => void
     spriteElementClass?: string
-    noHealthBar?: boolean;
+    noHealthBar?: boolean
     objectOptions?: GameObjectOptions
 }
 

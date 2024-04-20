@@ -1,6 +1,6 @@
 import { Enemy } from '@/scripts/enemy'
 import { GameObject, objects } from '@/scripts/game-objects'
-import { initializePlayer } from '@/scripts/player'
+import { initializePlayer } from '@/scripts/player/player'
 import { getRandomInteger } from '@/scripts/utils/get-random-integer'
 
 let currentUpdateFrameId : number | undefined = undefined
@@ -65,7 +65,7 @@ function addEnvironmentObjects() {
 
     setInterval(() => {
         const enemyCount = objects.filter(object => object instanceof Enemy).length
-        const MAX_ENEMY_COUNT = 3
+        const MAX_ENEMY_COUNT = 0
 
         try {
             for (let newEnemyCount = 0; newEnemyCount < MAX_ENEMY_COUNT - enemyCount; newEnemyCount++) {

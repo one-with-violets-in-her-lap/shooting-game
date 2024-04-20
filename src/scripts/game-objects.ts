@@ -1,4 +1,4 @@
-import { Position } from '@/scripts/types/position';
+import { Position } from '@/scripts/types/position'
 
 export class CollisionError extends Error {
     constructor(public readonly object?: GameObject) {
@@ -8,12 +8,12 @@ export class CollisionError extends Error {
 }
 
 export interface GameObjectOptions {
-    domElementClass?: string;
+    domElementClass?: string
     collision?: {
-        disabled?: boolean;
-        doWhenObjectCollided?: (collidedObject: GameObject) => void;
-        doWhenCollidedIntoObject?: (targetObject: GameObject) => void;
-        bottomCollisionTrigger?: 'top' | 'bottom';
+        disabled?: boolean
+        doWhenObjectCollided?: (collidedObject: GameObject) => void
+        doWhenCollidedIntoObject?: (targetObject: GameObject) => void
+        bottomCollisionTrigger?: 'top' | 'bottom'
     }
 }
 
@@ -66,12 +66,16 @@ export class GameObject {
     setPosition(newPosition: Partial<Position>) {
         if(newPosition.x !== undefined && (newPosition.x + this.width > this.stage?.clientWidth
             || newPosition.x < 0)) {
-            throw new CollisionError()
+            if(!this.options?.collision?.disabled) {
+                throw new CollisionError()
+            }
         }
          
         if(newPosition.y !== undefined && (newPosition.y + this.height > this.stage?.clientHeight
             || newPosition.y < 0)) {
-            throw new CollisionError()
+            if(!this.options?.collision?.disabled) {
+                throw new CollisionError()
+            }
         }
 
         const bottomCollisionOffset =

@@ -1,6 +1,6 @@
 import { Entity } from '@/scripts/entity'
 import { CollisionError, GameObject, GameObjectOptions } from '@/scripts/game-objects.ts'
-import { Player, player } from '@/scripts/player'
+import { Player, player } from '@/scripts/player/player'
 import { Position, Direction } from '@/scripts/types/position'
 import { wait } from '@/scripts/utils/wait'
 

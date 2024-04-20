@@ -5,6 +5,7 @@ import { Entity } from '@/scripts/entity'
 import { resetGame } from '@/scripts/game'
 import { GameObject } from '@/scripts/game-objects'
 import { getTypedObjectKeys } from '@/scripts/utils/get-typed-object-keys'
+import { Gun } from '@/scripts/player/gun'
 
 const moveState = {
     left: { active: false, key: 'A' },
@@ -67,6 +68,8 @@ export class Player extends Entity {
 
         this.damageAudio = new Audio(DamageAudio)
         this.damageAudio.volume = 0.05
+        
+        new Gun(this)
     }
 
     update() {

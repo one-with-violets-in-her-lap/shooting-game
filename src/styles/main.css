@@ -22,3 +22,24 @@
 .rock {
     background-image: url('../assets/images/rock.png');
 }
+
+.gun {
+    background-image: url('@/assets/images/gun.png');
+    filter: drop-shadow(4px 7px 6px #000000);
+}
+.bullet {
+    background-image: url('@/assets/images/bullet.png');
+    background-size: 256px;
+    background-repeat: no-repeat;
+    background-position: 0px;
+    animation: bullet-spritesheet-animation steps(4) 0.8s infinite;
+}
+
+@keyframes bullet-spritesheet-animation {
+    0% {
+        background-position: 0px;
+    }
+    100% {
+        background-position: -256px;
+    }
+}
