@@ -31,6 +31,8 @@ export class Gun extends GameObject {
     }
 
     update() {
+        const GUN_AND_PLAYER_GAP_MULTIPLIER = 60
+
         const holderPosition = this.holderObject.getPosition()
         const gunPosition = this.getPosition()
 
@@ -56,8 +58,8 @@ export class Gun extends GameObject {
         )* (180 / Math.PI)
 
         this.setPosition({
-            x: gunOrigin.x + directionX * 60,
-            y: gunOrigin.y + directionY * 70,
+            x: gunOrigin.x + directionX * GUN_AND_PLAYER_GAP_MULTIPLIER,
+            y: gunOrigin.y + directionY * GUN_AND_PLAYER_GAP_MULTIPLIER,
         })
 
         this.angle = angle
@@ -67,6 +69,8 @@ export class Gun extends GameObject {
     }
 
     private shoot(event: MouseEvent) {
+        const BULLET_AND_GUN_GAP_MULTIPLIER = 70
+
         this.shotAudio.currentTime = 0
         this.shotAudio.play()
 
@@ -86,8 +90,8 @@ export class Gun extends GameObject {
 
         try {
             new Bullet({
-                x: bulletOrigin.x + directionX * 30,
-                y: bulletOrigin.y + directionY * 30
+                x: bulletOrigin.x + directionX * BULLET_AND_GUN_GAP_MULTIPLIER,
+                y: bulletOrigin.y + directionY * BULLET_AND_GUN_GAP_MULTIPLIER
             }, this.angle)
         }
         catch(error) {}
