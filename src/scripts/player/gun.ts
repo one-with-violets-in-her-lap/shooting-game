@@ -27,7 +27,7 @@ export class Gun extends GameObject {
         this.stage.addEventListener('click', event => this.shoot(event))
 
         this.shotAudio = new Audio(ShotAudio)
-        this.shotAudio.volume = 0.2
+        this.shotAudio.volume = 0.05
     }
 
     update() {
