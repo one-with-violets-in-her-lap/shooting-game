@@ -44,7 +44,6 @@ export class GameObject {
             this.setPosition(this.position)
         }
         catch(error) {
-            console.log('collision at ' + this.position.x, this.position.y)
             throw error
         }
 
