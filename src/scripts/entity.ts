@@ -55,9 +55,13 @@ export class Entity extends GameObject {
         }
 
         if(newHealth <= 0) {
-            console.log('bye')
-            
             this.domElement.classList.add('dying')
+            if(this.options?.collision) {
+                this.options.collision = {
+                    disabled: true
+                }
+            }
+
             setTimeout(() => {
                 if(this.entityOptions?.doOnDeath) {
                     this.entityOptions.doOnDeath(this)
@@ -68,6 +72,7 @@ export class Entity extends GameObject {
         }
 
         if(hurt && newHealth >= 0) {
+            this.damageAudio.currentTime = 0
             this.damageAudio.play()
         }
     }
