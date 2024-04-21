@@ -26,7 +26,8 @@ export class Enemy extends Entity {
                         }
                     }
                 },
-            }
+            },
+            domElementClasses: ['enemy-container']
         }
         super(position, Enemy.MAX_HEALTH_POINTS, {
             spriteElementClass: 'enemy-sprite',

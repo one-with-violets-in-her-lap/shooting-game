@@ -47,7 +47,7 @@ function addEnvironmentObjects() {
     
     for(let rockCount = 0; rockCount < MAX_ROCKS; rockCount++) {
         try {
-            const rock = new GameObject(56, 120, {
+            new GameObject(56, 120, {
                 x: getRandomInteger(
                     ROCKS_X_BOUNDS.min + ROCK_SIZE.width,
                     ROCKS_X_BOUNDS.max - ROCK_SIZE.width
@@ -57,7 +57,7 @@ function addEnvironmentObjects() {
                     ROCKS_Y_BOUNDS.max - ROCK_SIZE.height
                 ),
             }, {
-                domElementClass: 'rock',
+                domElementClasses: ['rock'],
             })
         }
         catch(error) {}
@@ -69,7 +69,7 @@ function addEnvironmentObjects() {
 
         try {
             for (let newEnemyCount = 0; newEnemyCount < MAX_ENEMY_COUNT - enemyCount; newEnemyCount++) {
-                const enemy = new Enemy({
+                new Enemy({
                     x: getRandomInteger(62, window.innerWidth - 62),
                     y: getRandomInteger(92, window.innerHeight - 92)
                 })

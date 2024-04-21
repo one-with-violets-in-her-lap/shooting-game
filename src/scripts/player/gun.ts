@@ -18,7 +18,7 @@ export class Gun extends GameObject {
             y: holderObject.getPosition().y,
             x: holderObject.getPosition().x 
         }, {
-            domElementClass: 'gun',
+            domElementClasses: ['gun'],
             collision: { disabled: true }
         })
 

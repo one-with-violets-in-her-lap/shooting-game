@@ -8,7 +8,7 @@ export class CollisionError extends Error {
 }
 
 export interface GameObjectOptions {
-    domElementClass?: string
+    domElementClasses?: string[]
     collision?: {
         disabled?: boolean
         doWhenObjectCollided?: (collidedObject: GameObject) => void
@@ -36,8 +36,8 @@ export class GameObject {
         this.domElement.setAttribute('id', `object${this.id}`)
         
         this.domElement.classList.add('object')
-        if(this.options?.domElementClass) {
-            this.domElement.classList.add(this.options.domElementClass)
+        if(this.options?.domElementClasses) {
+            this.domElement.classList.add(...this.options.domElementClasses)
         }
         
         try {

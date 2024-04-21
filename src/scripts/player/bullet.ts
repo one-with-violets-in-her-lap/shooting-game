@@ -9,7 +9,7 @@ export class Bullet extends GameObject {
     constructor(initialPosition: Position, angle: number) {
         try {
             super(64, 64, initialPosition, {
-                domElementClass: 'bullet'
+                domElementClasses: ['bullet']
             })
 
             this.angle = angle

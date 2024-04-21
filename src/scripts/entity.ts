@@ -18,10 +18,11 @@ export class Entity extends GameObject {
 
     constructor(position: Position, private readonly maxHealth: number,
         entityOptions?: EntityOptions) {
+        const additionalClasses = entityOptions?.objectOptions?.domElementClasses || []
 
         super(52, 82, position, {
-            domElementClass: 'entity-container',
-            ...entityOptions?.objectOptions
+            ...entityOptions?.objectOptions,
+            domElementClasses: [...additionalClasses, 'entity-container'],
         })
 
         this.entityOptions = entityOptions

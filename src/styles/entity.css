@@ -15,6 +15,10 @@
     opacity: 0.6;
 }
 
+.enemy-container {
+    filter: drop-shadow(-4px 24px 4px #00000080);
+}
+
 .entity-sprite {
     position: absolute;
 
@@ -29,8 +33,9 @@
 
     filter: drop-shadow(-4px 24px 4px #00000080);
 }
+
 .enemy-sprite {
-    filter: drop-shadow(-4px 24px 4px rgba(0, 217, 255, 0.253)) hue-rotate(-290deg);
+    filter: hue-rotate(-290deg);
 }
 
 .entity-container:not([direction="none"]) .entity-sprite {
