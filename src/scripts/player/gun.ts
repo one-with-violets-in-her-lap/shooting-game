@@ -1,6 +1,6 @@
 import ShotAudio from '@/assets/audio/shot.mp3'
 
-import { GameObject } from '@/scripts/game-objects'
+import { CollisionError, GameObject } from '@/scripts/game-objects'
 import { Position } from '@/scripts/types/position'
 import { Bullet } from '@/scripts/player/bullet'
 
@@ -24,7 +24,7 @@ export class Gun extends GameObject {
 
         document.addEventListener('mousemove', this.updateMousePosition)
 
-        this.stage.addEventListener('click', event => this.shoot(event))
+        this.stage.addEventListener('click', () => this.shoot())
 
         this.shotAudio = new Audio(ShotAudio)
         this.shotAudio.volume = 0.05
@@ -38,7 +38,7 @@ export class Gun extends GameObject {
 
         const gunOrigin = {
             x: holderPosition.x,
-            y: holderPosition.y + (this.height / 2),
+            y: holderPosition.y + this.height,
         }
         const gunCenter = {
             x: gunPosition.x + (this.width / 2),
@@ -68,7 +68,7 @@ export class Gun extends GameObject {
         super.update()
     }
 
-    private shoot(event: MouseEvent) {
+    private shoot() {
         const BULLET_AND_GUN_GAP_MULTIPLIER = 70
 
         this.shotAudio.currentTime = 0
