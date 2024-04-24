@@ -39,9 +39,13 @@ export class Player extends Entity {
 
     private walkingAudio
 
+    private gun
+
     constructor() {
         super({ x: 10, y: 10 }, Player.MAX_HEALTH_POINTS, {
-            doOnDeath() {
+            doBeforeDeathAnimation: () => {
+                this.gun.destroy()
+
                 const titleScreen = document.querySelector('#titleScreen') as HTMLElement
                 const heading = titleScreen.querySelector('h1') as HTMLHeadingElement
                 const startButton = titleScreen.querySelector('button') as HTMLButtonElement
@@ -65,7 +69,7 @@ export class Player extends Entity {
         this.walkingAudio.loop = true
         this.walkingAudio.volume = 0.2
 
-        new Gun(this)
+        this.gun = new Gun(this)
     }
 
     update() {

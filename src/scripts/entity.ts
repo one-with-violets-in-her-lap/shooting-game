@@ -4,7 +4,8 @@ import { GameObject, GameObjectOptions } from '@/scripts/game-objects'
 import { Position } from '@/scripts/types/position'
 
 interface EntityOptions {
-    doOnDeath?: (entity: Entity) => void
+    doAfterDeathAnimation?: (entity: Entity) => void;
+    doBeforeDeathAnimation?: (entity: Entity) => void;
     spriteElementClass?: string
     noHealthBar?: boolean
     objectOptions?: GameObjectOptions
@@ -56,6 +57,10 @@ export class Entity extends GameObject {
         }
 
         if(newHealth <= 0) {
+            if(this.entityOptions?.doBeforeDeathAnimation) {
+                this.entityOptions.doBeforeDeathAnimation(this)
+            }
+
             this.domElement.classList.add('dying')
             if(this.options?.collision) {
                 this.options.collision = {
@@ -64,8 +69,8 @@ export class Entity extends GameObject {
             }
 
             setTimeout(() => {
-                if(this.entityOptions?.doOnDeath) {
-                    this.entityOptions.doOnDeath(this)
+                if(this.entityOptions?.doAfterDeathAnimation) {
+                    this.entityOptions.doAfterDeathAnimation(this)
                 }
 
                 this.destroy()
