@@ -1,9 +1,7 @@
 import WalkingSound from '@/assets/audio/walking.mp3'
-import DamageAudio from '@/assets/audio/damage.mp3'
 
 import { Entity } from '@/scripts/entity'
 import { resetGame } from '@/scripts/game'
-import { GameObject } from '@/scripts/game-objects'
 import { getTypedObjectKeys } from '@/scripts/utils/get-typed-object-keys'
 import { Gun } from '@/scripts/player/gun'
 

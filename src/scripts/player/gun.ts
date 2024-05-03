@@ -1,7 +1,6 @@
 import ShotAudio from '@/assets/audio/shot.mp3'
 
-import { CollisionError, GameObject } from '@/scripts/game-objects'
-import { Position } from '@/scripts/types/position'
+import { GameObject } from '@/scripts/game-objects'
 import { Bullet } from '@/scripts/player/bullet'
 
 export class Gun extends GameObject {
