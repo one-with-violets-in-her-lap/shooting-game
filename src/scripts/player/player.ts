@@ -46,6 +46,7 @@ export class Player extends Entity {
             doBeforeDeathAnimation: () => {
                 this.gun.destroy()
 
+                // death screen should be a separate element, will do that later
                 const titleScreen = document.querySelector('#titleScreen') as HTMLElement
                 const heading = titleScreen.querySelector('h1') as HTMLHeadingElement
                 const startButton = titleScreen.querySelector('button') as HTMLButtonElement
@@ -54,6 +55,7 @@ export class Player extends Entity {
                 heading.textContent = 'imagine dying at this game'
                 startButton.textContent = 'restart'
                 startButton.style.pointerEvents = 'none'
+                titleScreen.querySelector('p')?.remove()
 
                 setTimeout(() => {
                     resetGame()
