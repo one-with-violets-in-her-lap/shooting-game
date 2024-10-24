@@ -1,4 +1,4 @@
-# simple shooting game
+# simple shooting game, you don't need canvas for that
 
 kill enemies and dont get hit
 
